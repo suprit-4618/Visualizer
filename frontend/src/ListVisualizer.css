@@ -1,0 +1,295 @@
+.content-area.lists-mode {
+  overflow: hidden;
+  padding: 0;
+  gap: 0;
+  background: #0d0d0d;
+}
+
+.list-vis-container {
+  display: grid;
+  grid-template-columns: 70% 30%;
+  gap: 24px;
+  height: 100%;
+  max-height: calc(100vh - 80px);
+  padding: 24px;
+  background: #0d0d0d;
+  color: #fff;
+  font-family: sans-serif;
+  box-sizing: border-box;
+}
+
+.list-vis-middle {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+}
+
+.list-vis-right {
+  display: flex;
+  flex-direction: column;
+  background: #141414;
+  border-left: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 16px;
+  overflow-y: auto;
+}
+
+/* CARDS */
+.lv-card {
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: all 0.3s ease-out;
+}
+
+/* RESIZE TRIGGER PULSE */
+.lv-card.resizing {
+  animation: cardResizeFlash 0.8s ease-in-out;
+  border-color: rgba(45, 212, 191, 0.8);
+  box-shadow: 0 0 20px rgba(45, 212, 191, 0.2);
+}
+
+@keyframes cardResizeFlash {
+  0% { transform: scale(1); border-color: rgba(255, 255, 255, 0.07); }
+  50% { transform: scale(1.02); border-color: #2dd4bf; background: rgba(45, 212, 191, 0.05); }
+  100% { transform: scale(1); border-color: rgba(255, 255, 255, 0.07); }
+}
+
+/* TYPOGRAPHY */
+.lv-header {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #888;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+
+.lv-op-name {
+  font-size: 13px;
+  color: #ccc;
+}
+
+/* CELLS */
+.lv-cells-container {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 24px 0;
+  align-items: center;
+  min-height: 120px;
+}
+
+.lv-char-cell {
+  width: 56px;
+  min-width: 56px;
+  height: 64px;
+  background: #1f1f1f;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  animation: cellDropIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes cellDropIn {
+  0% { opacity: 0; transform: translateY(-20px) scale(0.8); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* GHOST CELLS FOR EMPTY CAPACITY */
+.lv-char-cell.ghost {
+  background: transparent;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  animation: none;
+}
+.lv-char-cell.ghost .lv-char-val {
+  color: rgba(255, 255, 255, 0.15);
+}
+
+.lv-char-cell.highlighted {
+  border-color: rgba(45, 212, 191, 0.8);
+  background: rgba(45, 212, 191, 0.08);
+  box-shadow: 0 0 12px rgba(45, 212, 191, 0.1);
+}
+
+.lv-char-cell.remove-mark {
+  border-color: #ff5252;
+  background: rgba(255, 82, 82, 0.1);
+  animation: cellVanish 0.4s ease-out forwards;
+}
+
+@keyframes cellVanish {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); background: rgba(255, 82, 82, 0.2); }
+  100% { transform: scale(0); opacity: 0; }
+}
+
+.lv-char-val {
+  font-size: 18px;
+  font-family: monospace;
+  color: #fff;
+  font-weight: bold;
+}
+
+.lv-indices-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 4px;
+  gap: 2px;
+}
+
+.lv-char-idx {
+  font-size: 10px;
+  color: #666;
+  font-family: monospace;
+}
+
+.lv-char-neg-idx {
+  font-size: 9px;
+  color: #ff5252;
+  font-family: monospace;
+  font-weight: bold;
+  animation: negFadeIn 0.3s ease-out;
+}
+
+@keyframes negFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* RESULTS */
+.lv-result-val {
+  font-size: 28px;
+  font-family: monospace;
+  color: #fff;
+  margin-top: 8px;
+}
+.lv-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #aaa;
+  margin-left: 12px;
+  vertical-align: middle;
+}
+
+/* LOGS */
+.lv-log-container {
+  font-family: monospace;
+  font-size: 12px;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
+  padding: 12px;
+  max-height: 120px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.lv-log-success { color: #2dd4bf; }
+.lv-log-error { color: #ff5252; }
+.lv-log-time { color: #555; margin-right: 8px; }
+
+/* OP PANEL ITEMS */
+.lv-op-item {
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border-left: 2px solid transparent;
+  transition: all 0.2s ease-out;
+}
+.lv-op-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+.lv-op-item.active {
+  background: rgba(255, 255, 255, 0.05);
+  border-left-color: rgba(45, 212, 191, 0.8);
+}
+.lv-op-item.active .lv-op-name {
+  color: #fff;
+}
+
+/* FORM */
+.lv-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+.lv-form-input {
+  background: #1f1f1f;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 13px;
+  outline: none;
+}
+.lv-form-input:focus {
+  border-color: rgba(45, 212, 191, 0.5);
+}
+.lv-btn {
+  background: rgba(45, 212, 191, 0.15);
+  color: #2dd4bf;
+  border: 1px solid rgba(45, 212, 191, 0.3);
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease-out;
+}
+.lv-btn:hover {
+  background: rgba(45, 212, 191, 0.25);
+}
+
+/* ALGORITHM PLAYER */
+.lv-player {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1f1f1f;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 12px 16px;
+  border-radius: 6px;
+}
+.lv-player-info {
+  font-size: 13px;
+  font-family: monospace;
+  color: #2dd4bf;
+}
+.lv-player-controls {
+  display: flex;
+  gap: 8px;
+}
+.lv-player-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.lv-player-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}

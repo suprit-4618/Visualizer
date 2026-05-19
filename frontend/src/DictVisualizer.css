@@ -1,0 +1,322 @@
+.content-area.dictionaries-mode {
+  overflow: hidden;
+  padding: 0;
+  gap: 0;
+  background: #0d0d0d;
+}
+
+.dict-vis-container {
+  display: grid;
+  grid-template-columns: 70% 30%;
+  gap: 24px;
+  height: 100%;
+  max-height: calc(100vh - 80px);
+  padding: 24px;
+  background: #0d0d0d;
+  color: #fff;
+  font-family: sans-serif;
+  box-sizing: border-box;
+}
+
+.dict-vis-middle {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+.dict-vis-right {
+  display: flex;
+  flex-direction: column;
+  background: #141414;
+  border-left: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 16px;
+  overflow-y: auto;
+}
+
+/* DICT CARDS */
+.dv-card {
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  transition: all 0.3s ease-out;
+}
+
+.dv-header {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #888;
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+
+.dv-op-name {
+  font-size: 13px;
+  color: #ccc;
+}
+
+/* TWO COLUMN ROW CANVAS */
+.dict-pairs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 0;
+  min-height: 120px;
+}
+
+.dict-pair-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease-out;
+}
+
+/* DROP IN ROW */
+.dict-row-new {
+  animation: rowDropIn 0.4s ease-out forwards;
+}
+
+@keyframes rowDropIn {
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* DELETE ROW */
+.dict-row-deleted {
+  animation: rowFadeOut 0.4s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes rowFadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(16px); }
+}
+
+/* KEY CELL STYLING */
+.dict-key-cell {
+  flex: 1;
+  background: #1e2020;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-family: monospace;
+  font-size: 14px;
+  color: #2dd4bf;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.3s ease-out;
+}
+
+.dict-key-cell.glow-teal {
+  border-color: rgba(45, 212, 191, 0.8) !important;
+  background: rgba(45, 212, 191, 0.12) !important;
+  box-shadow: 0 0 12px rgba(45, 212, 191, 0.2);
+}
+
+.dict-arrow {
+  color: #555;
+  font-family: monospace;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* VALUE CELL STYLING */
+.dict-val-cell {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-family: monospace;
+  font-size: 14px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease-out;
+}
+
+.dict-val-cell.pulse {
+  animation: valuePulse 0.5s ease-in-out;
+}
+
+@keyframes valuePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); border-color: #2dd4bf; background: rgba(45, 212, 191, 0.08); }
+}
+
+.dict-val-cell.flash-amber {
+  animation: amberFlash 0.6s ease-in-out;
+}
+
+@keyframes amberFlash {
+  0%, 100% { border-color: rgba(255,255,255,0.05); background: rgba(255,255,255,0.02); }
+  50% { border-color: #fbbf24; background: rgba(251, 191, 36, 0.15); }
+}
+
+/* CANVAS RED FLASH */
+.dv-card.flash-red {
+  animation: canvasRedFlash 0.5s ease-in-out;
+}
+
+@keyframes canvasRedFlash {
+  0%, 100% { border-color: rgba(255,255,255,0.07); box-shadow: none; }
+  50% { border-color: #ff5252; box-shadow: 0 0 15px rgba(255, 82, 82, 0.2); }
+}
+
+/* COLLAPSED LIST SECTIONS */
+.dict-collapsed-card {
+  background: #141414;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
+  padding: 12px;
+  transition: all 0.3s ease-out;
+}
+
+.dict-collapsed-card.glow-active {
+  border-color: rgba(45, 212, 191, 0.5);
+  background: rgba(45, 212, 191, 0.04);
+  box-shadow: 0 0 8px rgba(45, 212, 191, 0.1);
+}
+
+.dict-flat-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+  animation: fanFadeIn 0.3s ease-out;
+}
+
+@keyframes fanFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dict-flat-item {
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 13px;
+  color: #fff;
+  transition: all 0.2s ease-out;
+}
+
+.dict-flat-item.glow-teal {
+  border-color: #2dd4bf;
+  background: rgba(45, 212, 191, 0.15);
+}
+
+/* RESULTS & LOGS */
+.dv-result-val {
+  font-size: 28px;
+  font-family: monospace;
+  color: #fff;
+  margin-top: 8px;
+}
+
+.dv-result-error {
+  color: #ff5252;
+  font-size: 24px;
+  font-family: monospace;
+  margin-top: 8px;
+}
+
+.dv-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #aaa;
+  margin-left: 12px;
+  vertical-align: middle;
+}
+
+.dv-log-container {
+  font-family: monospace;
+  font-size: 12px;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
+  padding: 12px;
+  max-height: 120px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.dv-log-success { color: #2dd4bf; }
+.dv-log-error { color: #ff5252; }
+.dv-log-time { color: #555; margin-right: 8px; }
+
+/* OP ITEM ROW */
+.dv-op-item {
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border-left: 2px solid transparent;
+  transition: all 0.2s ease-out;
+}
+.dv-op-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+.dv-op-item.active {
+  background: rgba(255, 255, 255, 0.05);
+  border-left-color: rgba(45, 212, 191, 0.8);
+}
+.dv-op-item.active .dv-op-name {
+  color: #fff;
+}
+
+/* FORM STYLING */
+.dv-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+.dv-form-input {
+  background: #1f1f1f;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 13px;
+  outline: none;
+}
+.dv-form-input:focus {
+  border-color: rgba(45, 212, 191, 0.5);
+}
+.dv-btn {
+  background: rgba(45, 212, 191, 0.15);
+  color: #2dd4bf;
+  border: 1px solid rgba(45, 212, 191, 0.3);
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease-out;
+}
+.dv-btn:hover {
+  background: rgba(45, 212, 191, 0.25);
+}

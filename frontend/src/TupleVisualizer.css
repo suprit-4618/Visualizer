@@ -1,0 +1,323 @@
+.content-area.tuples-mode {
+  overflow: hidden;
+  padding: 0;
+  gap: 0;
+  background: #0d0d0d;
+}
+
+.tuple-vis-container {
+  display: grid;
+  grid-template-columns: 70% 30%;
+  gap: 24px;
+  height: 100%;
+  max-height: calc(100vh - 80px);
+  padding: 24px;
+  background: #0d0d0d;
+  color: #fff;
+  font-family: sans-serif;
+  box-sizing: border-box;
+}
+
+.tuple-vis-middle {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+}
+
+.tuple-vis-right {
+  display: flex;
+  flex-direction: column;
+  background: #141414;
+  border-left: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 16px;
+  overflow-y: auto;
+}
+
+/* CARDS */
+.tv-card {
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+}
+
+.tv-header {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #888;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tv-op-name {
+  font-size: 13px;
+  color: #ccc;
+}
+
+/* CELLS GRID */
+.tv-cells-container {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 24px 0;
+  align-items: center;
+  min-height: 140px;
+  transition: gap 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.tv-cells-container.fanned {
+  gap: 36px;
+}
+
+/* TUPLE CELL (IMMUTABLE STYLE) */
+.tv-char-cell {
+  width: 56px;
+  min-width: 56px;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* FAINT LOCK OVERLAY */
+.tv-lock-icon {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 10px;
+  opacity: 0.3;
+  color: #aaa;
+}
+
+/* HIGHLIGHT ACTIVE ACCESS OR RANGE */
+.tv-char-cell.highlighted {
+  border-color: rgba(45, 212, 191, 0.8);
+  background: rgba(45, 212, 191, 0.08);
+  box-shadow: 0 0 12px rgba(45, 212, 191, 0.1);
+}
+
+/* SHAKE VIOLATION ANIMATION */
+.tv-char-cell.shake-error {
+  animation: tupleShake 0.4s ease-in-out;
+  border-color: #ff5252 !important;
+  background: rgba(255, 82, 82, 0.05);
+}
+
+@keyframes tupleShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+/* IMMUTABILITY RED TOOLTIP */
+.tv-tooltip {
+  position: absolute;
+  top: -45px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ff5252;
+  color: #fff;
+  font-size: 11px;
+  font-family: monospace;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(255, 82, 82, 0.3);
+  z-index: 10;
+  pointer-events: none;
+  white-space: nowrap;
+  animation: tooltipFadeIn 0.3s ease-out;
+}
+
+@keyframes tooltipFadeIn {
+  from { opacity: 0; transform: translate(-50%, 8px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* SLICE RANGE BRACKET */
+.tv-bracket-container {
+  position: absolute;
+  top: 10px;
+  height: 6px;
+  border: 1px solid rgba(45, 212, 191, 0.8);
+  border-bottom: none;
+  pointer-events: none;
+  animation: bracketFade 0.3s ease-out;
+}
+
+@keyframes bracketFade {
+  from { opacity: 0; transform: scaleX(0.9); }
+  to { opacity: 1; transform: scaleX(1); }
+}
+
+.tv-char-val {
+  font-size: 18px;
+  font-family: monospace;
+  color: #fff;
+  font-weight: bold;
+}
+
+.tv-indices-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 4px;
+  gap: 2px;
+}
+
+.tv-char-idx {
+  font-size: 10px;
+  color: #666;
+  font-family: monospace;
+}
+
+.tv-char-neg-idx {
+  font-size: 9px;
+  color: #ff5252;
+  font-family: monospace;
+  font-weight: bold;
+  animation: negFadeIn 0.3s ease-out;
+}
+
+@keyframes negFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* UNPACKING LABELS */
+.tv-unpack-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 8px;
+  animation: fanFadeIn 0.4s ease-out;
+}
+
+@keyframes fanFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.tv-unpack-arrow {
+  font-size: 16px;
+  color: #2dd4bf;
+  margin-bottom: 2px;
+}
+
+.tv-unpack-var {
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: bold;
+  color: #fff;
+  background: rgba(45, 212, 191, 0.2);
+  border: 1px solid rgba(45, 212, 191, 0.5);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* RESULTS & LOGS */
+.tv-result-val {
+  font-size: 28px;
+  font-family: monospace;
+  color: #fff;
+  margin-top: 8px;
+}
+
+.tv-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #aaa;
+  margin-left: 12px;
+  vertical-align: middle;
+}
+
+.tv-log-container {
+  font-family: monospace;
+  font-size: 12px;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
+  padding: 12px;
+  max-height: 120px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tv-log-success { color: #2dd4bf; }
+.tv-log-error { color: #ff5252; }
+.tv-log-time { color: #555; margin-right: 8px; }
+
+/* OP ITEM ROW */
+.tv-op-item {
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border-left: 2px solid transparent;
+  transition: all 0.2s ease-out;
+}
+.tv-op-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+.tv-op-item.active {
+  background: rgba(255, 255, 255, 0.05);
+  border-left-color: rgba(45, 212, 191, 0.8);
+}
+.tv-op-item.active .tv-op-name {
+  color: #fff;
+}
+
+/* FORM STYLING */
+.tv-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+.tv-form-input {
+  background: #1f1f1f;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 13px;
+  outline: none;
+}
+.tv-form-input:focus {
+  border-color: rgba(45, 212, 191, 0.5);
+}
+.tv-btn {
+  background: rgba(45, 212, 191, 0.15);
+  color: #2dd4bf;
+  border: 1px solid rgba(45, 212, 191, 0.3);
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease-out;
+}
+.tv-btn:hover {
+  background: rgba(45, 212, 191, 0.25);
+}

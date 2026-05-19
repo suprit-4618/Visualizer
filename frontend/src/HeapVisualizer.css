@@ -1,0 +1,174 @@
+/* ── Layout ───────────────────────────────────────────────────────────────── */
+.content-area.heaps-mode {
+  overflow: hidden;
+  padding: 0;
+  background: #0d0d0d;
+}
+.heap-vis-container {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  height: 100%;
+  max-height: calc(100vh - 80px);
+  background: #0d0d0d;
+  color: #fff;
+  font-family: sans-serif;
+  box-sizing: border-box;
+}
+.heap-vis-middle {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 12px;
+  overflow: hidden;
+  min-height: 0;
+}
+.heap-vis-right {
+  display: flex;
+  flex-direction: column;
+  background: #141414;
+  border-left: 1px solid rgba(255,255,255,0.07);
+  padding: 16px;
+  overflow-y: auto;
+}
+
+/* ── Mode bar ─────────────────────────────────────────────────────────────── */
+.heap-mode-bar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+.heap-mode-btn {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #888;
+  padding: 5px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.2s;
+}
+.heap-mode-btn.max.active {
+  background: rgba(245,158,11,0.12);
+  border-color: #f59e0b;
+  color: #f59e0b;
+}
+.heap-mode-btn.min.active {
+  background: rgba(45,212,191,0.12);
+  border-color: #2dd4bf;
+  color: #2dd4bf;
+}
+
+/* ── Unified SVG canvas ───────────────────────────────────────────────────── */
+.heap-canvas-wrapper {
+  flex: 1;
+  position: relative;
+  background: #111;
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 10px rgba(0,0,0,0.8);
+  min-height: 0;
+}
+.heap-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.heap-canvas-info {
+  position: absolute;
+  top: 12px;
+  left: 16px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #333;
+  pointer-events: none;
+}
+/* Divider line between tree and array sections */
+.heap-section-label {
+  font-size: 9px;
+  fill: #333;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+/* ── Tree nodes ───────────────────────────────────────────────────────────── */
+.hn-default   { fill: #1d1d1d; stroke: rgba(255,255,255,0.1); stroke-width: 1.5; transition: fill 0.25s, stroke 0.25s, filter 0.25s; }
+.hn-root-max  { fill: rgba(245,158,11,0.2); stroke: #f59e0b; stroke-width: 2.5; filter: drop-shadow(0 0 8px rgba(245,158,11,0.6)); }
+.hn-root-min  { fill: rgba(45,212,191,0.2); stroke: #2dd4bf; stroke-width: 2.5; filter: drop-shadow(0 0 8px rgba(45,212,191,0.6)); }
+.hn-swapping  { fill: rgba(245,158,11,0.3); stroke: #f59e0b; stroke-width: 2.5; filter: drop-shadow(0 0 10px rgba(245,158,11,0.7)); }
+.hn-new       { fill: rgba(168,85,247,0.2); stroke: #a855f7; stroke-width: 2; filter: drop-shadow(0 0 8px rgba(168,85,247,0.5)); }
+.hn-init      { fill: rgba(45,212,191,0.12); stroke: rgba(45,212,191,0.5); stroke-width: 1.5; }
+
+/* ── Tree edges ───────────────────────────────────────────────────────────── */
+.he-default  { stroke: rgba(255,255,255,0.1); stroke-width: 1.5; }
+.he-swapping { stroke: #f59e0b; stroke-width: 2.5; }
+
+/* ── Array cells (mirror of Arrays section style) ────────────────────────── */
+.heap-cell-rect {
+  fill: #1e1e1e;
+  stroke: rgba(255,255,255,0.08);
+  stroke-width: 1.5;
+  rx: 6;
+  transition: fill 0.25s, stroke 0.25s;
+}
+.heap-cell-rect.swapping {
+  fill: rgba(245,158,11,0.2);
+  stroke: #f59e0b;
+  stroke-width: 2;
+}
+.heap-cell-rect.new-node {
+  fill: rgba(168,85,247,0.18);
+  stroke: #a855f7;
+  stroke-width: 2;
+}
+.heap-cell-rect.init-node {
+  fill: rgba(45,212,191,0.1);
+  stroke: rgba(45,212,191,0.5);
+}
+.heap-cell-val {
+  fill: #e2e2e2;
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: 600;
+  pointer-events: none;
+  user-select: none;
+}
+.heap-cell-idx {
+  fill: #444;
+  font-family: monospace;
+  font-size: 9px;
+  pointer-events: none;
+}
+.heap-node-label {
+  fill: #e0e0e0;
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: 600;
+  pointer-events: none;
+  user-select: none;
+}
+/* Connector lines: tree node → array cell */
+.heap-connector {
+  stroke: rgba(255,255,255,0.05);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+
+/* ── Step controls (reuse graph-step-* classes via GraphVisualizer.css) ────── */
+/* ── Result + Log (reuse stv-* classes via StackVisualizer.css) ─────────── */
+
+/* ── Animations ───────────────────────────────────────────────────────────── */
+@keyframes heapSwapFlash {
+  0%   { filter: none; }
+  40%  { filter: drop-shadow(0 0 12px rgba(245,158,11,0.9)); }
+  100% { filter: none; }
+}
+@keyframes heapNodePop {
+  from { r: 0; opacity: 0; }
+  to   { r: 22; opacity: 1; }
+}

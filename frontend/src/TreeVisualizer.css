@@ -1,0 +1,231 @@
+/* ── Layout ───────────────────────────────────────────────────────────────── */
+.content-area.trees-mode {
+  overflow: hidden;
+  padding: 0;
+  background: #0d0d0d;
+}
+.tree-vis-container {
+  display: grid;
+  grid-template-columns: 70% 30%;
+  height: 100%;
+  max-height: calc(100vh - 80px);
+  background: #0d0d0d;
+  color: #fff;
+  font-family: sans-serif;
+  box-sizing: border-box;
+}
+.tree-vis-middle {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 24px;
+  overflow: hidden;
+}
+.tree-vis-right {
+  display: flex;
+  flex-direction: column;
+  background: #141414;
+  border-left: 1px solid rgba(255,255,255,0.07);
+  padding: 16px;
+  overflow-y: auto;
+}
+
+/* ── Mode tabs ────────────────────────────────────────────────────────────── */
+.tree-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.tree-tab {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #888;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+.tree-tab:hover { background: rgba(255,255,255,0.05); color: #ccc; }
+.tree-tab.active {
+  background: rgba(20,184,166,0.12);
+  border-color: #2dd4bf;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(20,184,166,0.15);
+}
+
+/* ── SVG Canvas ───────────────────────────────────────────────────────────── */
+.tree-canvas-wrapper {
+  flex: 1;
+  position: relative;
+  background: #151515;
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.8);
+  min-height: 0;
+}
+.tree-canvas-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #444;
+  font-size: 14px;
+  font-style: italic;
+  pointer-events: none;
+}
+.tree-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.tree-canvas-info {
+  position: absolute;
+  top: 12px;
+  left: 16px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #555;
+}
+
+/* ── SVG elements ─────────────────────────────────────────────────────────── */
+.tree-edge {
+  stroke: rgba(255,255,255,0.1);
+  stroke-width: 1.5;
+  transition: stroke 0.35s, stroke-width 0.35s;
+}
+.tree-edge.active       { stroke: #2dd4bf; stroke-width: 2.5; }
+.tree-edge.not-found    { stroke: #ef4444; stroke-width: 2; }
+.tree-edge.traversed    { stroke: rgba(45,212,191,0.45); stroke-width: 2; }
+
+.tree-node-g { cursor: default; }
+.tree-node-circle {
+  fill: #1e1e1e;
+  stroke: rgba(255,255,255,0.1);
+  stroke-width: 1.5;
+  transition: fill 0.35s, stroke 0.35s, filter 0.35s;
+}
+.tree-node-circle.active {
+  fill: rgba(45,212,191,0.15);
+  stroke: #2dd4bf;
+  stroke-width: 2.5;
+}
+.tree-node-circle.found {
+  fill: rgba(45,212,191,0.2);
+  stroke: #2dd4bf;
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 8px rgba(45,212,191,0.65));
+}
+.tree-node-circle.not-found {
+  fill: rgba(239,68,68,0.15);
+  stroke: #ef4444;
+  stroke-width: 2;
+  filter: drop-shadow(0 0 6px rgba(239,68,68,0.5));
+}
+.tree-node-circle.traversed {
+  fill: rgba(45,212,191,0.2);
+  stroke: #2dd4bf;
+  stroke-width: 2;
+}
+.tree-node-circle.successor {
+  fill: rgba(245,158,11,0.18);
+  stroke: #f59e0b;
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 8px rgba(245,158,11,0.5));
+}
+.tree-node-circle.deleting {
+  animation: nodeDelete 0.45s ease-out forwards;
+}
+.tree-node-circle.inserting {
+  animation: nodeInsert 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards;
+}
+.tree-node-circle.highlighted {
+  fill: rgba(168,85,247,0.18);
+  stroke: #a855f7;
+  stroke-width: 2;
+}
+
+.tree-node-label {
+  fill: #e2e2e2;
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: 600;
+  pointer-events: none;
+  user-select: none;
+}
+.tree-node-label.dim { fill: #555; }
+
+.tree-bf-badge {
+  fill: #f59e0b;
+  font-family: monospace;
+  font-size: 9px;
+  pointer-events: none;
+}
+
+.tree-compare-label {
+  fill: #fff;
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: bold;
+  pointer-events: none;
+  filter: drop-shadow(0 0 3px rgba(0,0,0,0.8));
+}
+
+/* ── Panel shared (reuse stv-* from StackVisualizer.css) ─────────────────── */
+
+/* ── Result / Log cards ───────────────────────────────────────────────────── */
+.tree-result-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+.tree-result-card {
+  flex: 1;
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+.tree-traversal-sequence {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.tree-traversal-chip {
+  font-family: monospace;
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(45,212,191,0.08);
+  border: 1px solid rgba(45,212,191,0.2);
+  color: #2dd4bf;
+  transition: all 0.3s;
+}
+.tree-traversal-chip.active {
+  background: rgba(45,212,191,0.25);
+  border-color: #2dd4bf;
+  box-shadow: 0 0 8px rgba(45,212,191,0.4);
+}
+
+/* ── Animations ───────────────────────────────────────────────────────────── */
+@keyframes nodeInsert {
+  from { r: 0; opacity: 0; }
+  to   { r: 22; opacity: 1; }
+}
+@keyframes nodeDelete {
+  from { opacity: 1; r: 22; }
+  to   { opacity: 0; r: 0;  }
+}
+@keyframes nodePulseTeal {
+  0%,100% { filter: none; }
+  50% { filter: drop-shadow(0 0 12px #2dd4bf); }
+}
+@keyframes nodeAmber {
+  0%,100% { filter: drop-shadow(0 0 6px rgba(245,158,11,0.4)); }
+  50%      { filter: drop-shadow(0 0 14px rgba(245,158,11,0.8)); }
+}
