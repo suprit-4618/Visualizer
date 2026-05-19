@@ -192,20 +192,20 @@
   align-items: center;
   justify-content: center;
   width: 36px;
+  min-width: 36px;
+  flex-shrink: 0;
   position: relative;
 }
 
 .ll-arrow-svg {
-  width: 100%;
+  width: 36px;
   height: 24px;
-  stroke: rgba(45, 212, 191, 0.4);
-  stroke-width: 2;
   fill: none;
   transition: all 0.3s ease-out;
 }
 
 .ll-arrow-svg.doubly {
-  height: 28px;
+  height: 32px;
 }
 
 .ll-null-box {

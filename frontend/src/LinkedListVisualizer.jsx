@@ -6,20 +6,21 @@ function ArrowConnector({ isDoubly }) {
   return (
     <div className="ll-connector">
       {isDoubly ? (
-        <svg className="ll-arrow-svg doubly" viewBox="0 0 36 28">
-          <path d="M 4 10 L 32 10" stroke="#2dd4bf" strokeWidth="2" fill="none" />
-          <path d="M 32 10 L 26 6" stroke="#2dd4bf" strokeWidth="2" fill="none" />
-          <path d="M 32 10 L 26 14" stroke="#2dd4bf" strokeWidth="2" fill="none" />
-          
-          <path d="M 32 18 L 4 18" stroke="#2dd4bf" strokeWidth="2" fill="none" />
-          <path d="M 4 18 L 10 14" stroke="#2dd4bf" strokeWidth="2" fill="none" />
-          <path d="M 4 18 L 10 22" stroke="#2dd4bf" strokeWidth="2" fill="none" />
+        <svg className="ll-arrow-svg doubly" viewBox="0 0 36 28" style={{ minWidth: '36px', overflow: 'visible' }}>
+          {/* Forward arrow: left → right */}
+          <path d="M 4 10 L 32 10" stroke="#2dd4bf" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+          <path d="M 32 10 L 25 6" stroke="#2dd4bf" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+          <path d="M 32 10 L 25 14" stroke="#2dd4bf" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+          {/* Backward arrow: right → left */}
+          <path d="M 32 19 L 4 19" stroke="#ec4899" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+          <path d="M 4 19 L 11 15" stroke="#ec4899" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+          <path d="M 4 19 L 11 23" stroke="#ec4899" strokeWidth="2.5" fill="none" strokeLinecap="round" />
         </svg>
       ) : (
-        <svg className="ll-arrow-svg" viewBox="0 0 36 20">
-          <path d="M 4 10 L 32 10" stroke="#2dd4bf" strokeWidth="2" fill="none" />
-          <path d="M 32 10 L 26 6" stroke="#2dd4bf" strokeWidth="2" fill="none" />
-          <path d="M 32 10 L 26 14" stroke="#2dd4bf" strokeWidth="2" fill="none" />
+        <svg className="ll-arrow-svg" viewBox="0 0 36 20" style={{ minWidth: '36px', overflow: 'visible' }}>
+          <path d="M 4 10 L 32 10" stroke="#2dd4bf" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+          <path d="M 32 10 L 25 6" stroke="#2dd4bf" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+          <path d="M 32 10 L 25 14" stroke="#2dd4bf" strokeWidth="2.5" fill="none" strokeLinecap="round" />
         </svg>
       )}
     </div>

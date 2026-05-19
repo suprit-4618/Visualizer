@@ -11,17 +11,36 @@ function CharCell({ char, index, highlighted }) {
   );
 }
 
-function StringInput({ currentString, setCurrentString, highlightedIndices }) {
+function StringInput({ currentString, pendingString, setPendingString, onSet, onClear, highlightedIndices, flash }) {
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') onSet();
+  };
+
   return (
     <div className="sv-card">
-      <input 
-        type="text" 
-        className="sv-input-bar" 
-        placeholder="Enter string here..." 
-        value={currentString} 
-        onChange={e => setCurrentString(e.target.value)}
-      />
-      <div className="sv-cells-container">
+      <div className="sv-string-toolbar">
+        <input 
+          type="text" 
+          className="sv-input-bar" 
+          placeholder="Enter string here..." 
+          value={pendingString} 
+          onChange={e => setPendingString(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+        <button className="sv-btn sv-btn-set" onClick={onSet} title="Load this string">
+          Set
+        </button>
+        <button className="sv-btn sv-btn-clear" onClick={onClear} title="Clear string">
+          ×
+        </button>
+      </div>
+
+      <div className="sv-current-label">
+        <span>Current String</span>
+        <span className="sv-len-badge">{currentString.length} chars</span>
+      </div>
+
+      <div className={`sv-cells-container ${flash ? 'sv-flash' : ''}`}>
         {currentString.split('').map((char, i) => (
           <CharCell 
             key={`${i}-${char}`} 
@@ -30,7 +49,7 @@ function StringInput({ currentString, setCurrentString, highlightedIndices }) {
             highlighted={highlightedIndices.includes(i)} 
           />
         ))}
-        {currentString.length === 0 && <div style={{color: '#666', padding: '16px'}}>Empty String</div>}
+        {currentString.length === 0 && <div style={{color: '#666', padding: '16px', fontStyle: 'italic'}}>Empty String — type above and click Set</div>}
       </div>
     </div>
   );
@@ -195,10 +214,32 @@ function OperationPanel({ activeOp, setActiveOp, onRun }) {
 
 export default function StringVisualizer() {
   const [currentString, setCurrentString] = useState('Hello World');
+  const [pendingString, setPendingString] = useState('Hello World');
   const [activeOperation, setActiveOperation] = useState(null);
   const [highlightedIndices, setHighlightedIndices] = useState([]);
   const [result, setResult] = useState(null);
   const [logs, setLogs] = useState([]);
+  const [flash, setFlash] = useState(false);
+
+  const handleSet = () => {
+    setCurrentString(pendingString);
+    setHighlightedIndices([]);
+    setResult(null);
+    // Flash animation to confirm the string was loaded
+    setFlash(true);
+    setTimeout(() => setFlash(false), 600);
+    const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+    setLogs(prev => [{ timestamp: time, expression: `→ String set to "${pendingString}"`, isError: false }, ...prev].slice(0, 6));
+  };
+
+  const handleClear = () => {
+    setPendingString('');
+    setCurrentString('');
+    setHighlightedIndices([]);
+    setResult(null);
+    const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+    setLogs(prev => [{ timestamp: time, expression: '→ String cleared', isError: false }, ...prev].slice(0, 6));
+  };
 
   const handleRun = (args) => {
     if (!activeOperation) return;
@@ -216,7 +257,7 @@ export default function StringVisualizer() {
 
     const time = new Date().toLocaleTimeString('en-US', { hour12: false });
     const newLog = { timestamp: time, expression: logEntry, isError };
-    setLogs(prev => [newLog, ...prev].slice(0, 6)); // Keep last 6
+    setLogs(prev => [newLog, ...prev].slice(0, 6));
   };
 
   // When active operation changes, clear highlights and result
@@ -229,9 +270,13 @@ export default function StringVisualizer() {
     <div className="string-vis-container">
       <div className="string-vis-middle">
         <StringInput 
-          currentString={currentString} 
-          setCurrentString={setCurrentString} 
-          highlightedIndices={highlightedIndices} 
+          currentString={currentString}
+          pendingString={pendingString}
+          setPendingString={setPendingString}
+          onSet={handleSet}
+          onClear={handleClear}
+          highlightedIndices={highlightedIndices}
+          flash={flash}
         />
         <ResultDisplay result={result} />
         <OperationLog logs={logs} />
